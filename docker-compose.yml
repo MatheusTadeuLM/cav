@@ -1,0 +1,29 @@
+version: '3.5'
+
+services:
+  cav:
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/vendor/
+    build: .
+    command: php -S cav:8000 -t public
+    restart: always
+
+  cavdb:
+    image: mysql:8.0
+    volumes:
+      - ./database/data:/var/lib/mysql:rw
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+    - ${DB_PORT}:${DB_PORT}
+    restart: always
+
+volumes:
+  db-data:
